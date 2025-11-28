@@ -19,8 +19,8 @@ dirs = os.listdir(IMAGEPATH)         #  找所有的檔案
 X=[]
 Y=[]
 print(dirs)
-w=32 # 224                            # 要訓練時的圖片大小
-h=32 # 224
+w=128 # 224                            # 要訓練時的圖片大小
+h=128 # 224
 c=3                                   # 顏色數 RGB 3  灰階 1
 i=0                                   # 類別編號
 for name in dirs:                     #  再往下讀取每個資料夾
