@@ -19,8 +19,8 @@ dirs = os.listdir(IMAGEPATH)         #  找所有的檔案
 X=[]
 Y=[]
 print(dirs)
-w=128 # 224                            # 要訓練時的圖片大小
-h=128 # 224
+w=224  #128 # 224                            # 要訓練時的圖片大小
+h=224  #128 # 224
 c=3                                   # 顏色數 RGB 3  灰階 1
 i=0                                   # 類別編號
 for name in dirs:                     #  再往下讀取每個資料夾
@@ -109,6 +109,7 @@ model.add(tf.keras.layers.Conv2D(filters=32, kernel_size=(3, 3),
 model.add(tf.keras.layers.Flatten())
 model.add(tf.keras.layers.Dense(1000, activation='relu'))
 model.add(tf.keras.layers.Dense(500, activation='relu'))
+model.add(tf.keras.layers.Dense(25, activation='relu'))
 model.add(tf.keras.layers.Dense(250, activation='relu'))
 model.add(tf.keras.layers.Dense(100))
 model.add(tf.keras.layers.Dense(units=category,
@@ -137,9 +138,10 @@ checkpoint = tf.keras.callbacks.ModelCheckpoint(
 trainData=datagen.flow(x_train,y_train2,batch_size=64)  # 批次大小 64 原本的一張圖片變成64張
 
 history = model.fit(trainData,
-                   epochs=20,
-                   callbacks=[checkpoint]
-                   )
+                    epochs=50,
+                    callbacks=[checkpoint],
+                    validation_data=(x_test, y_test2), 
+                    )
 
 
 # 保存模型
