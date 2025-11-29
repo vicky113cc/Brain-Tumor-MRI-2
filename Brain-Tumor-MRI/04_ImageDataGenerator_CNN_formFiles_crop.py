@@ -19,11 +19,11 @@ dirs = os.listdir(IMAGEPATH)         #  找所有的檔案
 X=[]
 Y=[]
 print(dirs)
-w=224  #128 # 224                            # 要訓練時的圖片大小
-h=224  #128 # 224
+w=128  #128 # 224                     # 太大張記憶體會爆掉，要訓練時的圖片大小
+h=128  #128 # 224
 c=3                                   # 顏色數 RGB 3  灰階 1
 i=0                                   # 類別編號
-for name in dirs:                     #  再往下讀取每個資料夾
+for name in dirs:                     # 再往下讀取每個資料夾
     file_paths = glob.glob(path.join(IMAGEPATH+"/"+name, '*.*'))   # 取得該文件內的所有檔案名稱
 
     ## 判斷是否是圖片檔案         
@@ -138,7 +138,7 @@ checkpoint = tf.keras.callbacks.ModelCheckpoint(
 trainData=datagen.flow(x_train,y_train2,batch_size=64)  # 批次大小 64 原本的一張圖片變成64張
 
 history = model.fit(trainData,
-                    epochs=50,
+                    epochs=100,
                     callbacks=[checkpoint],
                     validation_data=(x_test, y_test2), 
                     )
