@@ -100,18 +100,21 @@ datagen = tf.keras.preprocessing.image.ImageDataGenerator(
 
 # 建立模型
 model = tf.keras.models.Sequential()
-# 加入 2D 的 Convolution Layer，接著一層 ReLU 的 Activation 函數
+# 卷積層   加入 2D 的 Convolution Layer，接著一層 ReLU 的 Activation 函數
 model.add(tf.keras.layers.Conv2D(filters=32, kernel_size=(3, 3),
                  padding="same",
                  activation='relu',
                  input_shape=(w,h,c)))
 
+# 添加池化層減少特徵圖大小
+model.add(tf.keras.layers.MaxPooling2D(pool_size=(4, 4)))  # 128x128 -> 32x32
+
 model.add(tf.keras.layers.Flatten())
-model.add(tf.keras.layers.Dense(1000, activation='relu'))
+model.add(tf.keras.layers.Dense(500, activation='relu'))
 model.add(tf.keras.layers.Dense(500, activation='relu'))
 model.add(tf.keras.layers.Dense(25, activation='relu'))
 model.add(tf.keras.layers.Dense(250, activation='relu'))
-model.add(tf.keras.layers.Dense(100))
+model.add(tf.keras.layers.Dense(100, activation='relu'))
 model.add(tf.keras.layers.Dense(units=category,
     activation=tf.nn.softmax ))
 
