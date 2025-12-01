@@ -166,7 +166,7 @@ checkpoint = tf.keras.callbacks.ModelCheckpoint(
 trainData=datagen.flow(x_train,y_train2,batch_size=64)  # 批次大小 64 原本的一張圖片變成64張
 
 history = model.fit(trainData,
-                    epochs=50,
+                    epochs=80,
                     callbacks=[checkpoint],
                     validation_data=(x_test, y_test2), 
                     )
