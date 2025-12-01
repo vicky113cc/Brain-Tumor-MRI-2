@@ -117,10 +117,10 @@ model.add(tf.keras.layers.MaxPooling2D(pool_size=(4, 4)))  # 128x128 -> 32x32
 model.add(tf.keras.layers.Flatten())
 
 # 全連接層 
-# model.add(tf.keras.layers.Dense(1000, activation='relu'))
+model.add(tf.keras.layers.Dense(800, activation='relu'))
 model.add(tf.keras.layers.Dense(500, activation='relu'))
 model.add(tf.keras.layers.Dense(250, activation='relu'))
-model.add(tf.keras.layers.Dense(100))
+model.add(tf.keras.layers.Dense(100, activation='relu'))  # 線性層
 model.add(tf.keras.layers.Dense(units=category,
     activation=tf.nn.softmax ))
 
@@ -137,7 +137,7 @@ model.compile(
 
 # 顯示模型架構
 model.summary()
-learning_rate = 0.1   # 學習率
+learning_rate = 0.01   # 學習率
 opt1 = tf.keras.optimizers.Adam(learning_rate=learning_rate)  # 優化器
 model.compile(
     optimizer=opt1,
