@@ -132,28 +132,37 @@ datagen = tf.keras.preprocessing.image.ImageDataGenerator(
 # 建立模型
 model = tf.keras.models.Sequential()
 
-# 卷積層 - 加入 2D 的 Convolution Layer，接著一層 ReLU 的 Activation 函數
+# 3 層卷積，逐層增加 filters (64→128→256)
+# 第一組卷積 - 提取基礎特徵
 model.add(tf.keras.layers.Conv2D(
-    filters=32, 
+    filters=64, # 32→64 增加特徵提取能力
     kernel_size=(3, 3),
     padding="same",
     activation='relu',
     input_shape=(w, h, c)
 ))
 
-# 添加池化層減少特徵圖大小
-model.add(tf.keras.layers.MaxPooling2D(pool_size=(4, 4)))  # 128x128 -> 32x32
+model.add(tf.keras.layers.BatchNormalization())  # 加速訓練
+model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))  # 128x128 -> 32x32  # 添加池化層減少特徵圖大小
+
+# 第二組卷積 - 提取更複雜特徵
+model.add(tf.keras.layers.Conv2D(128, (3, 3), padding="same", activation='relu'))
+model.add(tf.keras.layers.BatchNormalization())
+model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))  # 64→32
+
+# 第三組卷積 - 深層特徵
+model.add(tf.keras.layers.Conv2D(256, (3, 3), padding="same", activation='relu'))
+model.add(tf.keras.layers.BatchNormalization())
+model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))  # 32→16
 
 # 平坦化層
 model.add(tf.keras.layers.Flatten())
 
 # 全連接層 
 model.add(tf.keras.layers.Dense(500, activation='relu'))
-model.add(tf.keras.layers.BatchNormalization())
+model.add(tf.keras.layers.BatchNormalization())  # 加速訓練
 model.add(tf.keras.layers.Dense(250, activation='relu'))
-model.add(tf.keras.layers.BatchNormalization())
-model.add(tf.keras.layers.Dense(100, activation='relu'))
-model.add(tf.keras.layers.Dense(10, activation='relu'))  
+model.add(tf.keras.layers.BatchNormalization())  # 加速訓練
 model.add(tf.keras.layers.Dense(units=category,
     activation=tf.nn.softmax ))
 
