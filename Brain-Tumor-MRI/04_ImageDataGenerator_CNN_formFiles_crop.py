@@ -121,7 +121,7 @@ model.add(tf.keras.layers.Dense(500, activation='relu'))
 model.add(tf.keras.layers.BatchNormalization())
 model.add(tf.keras.layers.Dense(200, activation='relu'))
 model.add(tf.keras.layers.BatchNormalization())
-model.add(tf.keras.layers.Dense(100, activation='relu'))
+model.add(tf.keras.layers.Dense(10, activation='relu'))
 model.add(tf.keras.layers.BatchNormalization())
 model.add(tf.keras.layers.Dense(200, activation='relu'))
 model.add(tf.keras.layers.BatchNormalization())
@@ -139,7 +139,7 @@ model.compile(
 
 # 顯示模型架構
 model.summary()
-learning_rate = 0.15   # 學習率
+learning_rate = 0.05   # 學習率
 opt1 = tf.keras.optimizers.Adam(learning_rate=learning_rate)  # 優化器
 model.compile(
     optimizer=opt1,
