@@ -12,7 +12,9 @@ import numpy as np
 import os.path as path
 import os
 import cv2
+from tensorflow.keras import layers, models
 from tensorflow.keras.activations import softmax
+from tensorflow.keras.applications import EfficientNetB0   # 醫學訓練
 
 IMAGEPATH = 'Training'                 #  圖片資料夾路徑
 dirs = os.listdir(IMAGEPATH)         #  找所有的檔案
@@ -98,46 +100,70 @@ datagen = tf.keras.preprocessing.image.ImageDataGenerator(
                             zoom_range=0.3 ,               # 隨機縮放範圍
 							data_format='channels_last')   # 圖片格式為 (張,高,寬,顏色數)
 
-# 建立模型
-model = tf.keras.models.Sequential()
 
-# 卷積層 - 加入 2D 的 Convolution Layer，接著一層 ReLU 的 Activation 函數
-model.add(tf.keras.layers.Conv2D(
-    filters=32, 
-    kernel_size=(3, 3),
-    padding="same",
-    activation='relu',
+# 使用遷移學習
+base_model = EfficientNetB0(
+    include_top=False,
+    weights='imagenet',
     input_shape=(w, h, c)
-))
+)
 
-# 添加池化層減少特徵圖大小
-model.add(tf.keras.layers.MaxPooling2D(pool_size=(4, 4)))  # 128x128 -> 32x32
+# 凍結預訓練層
+base_model.trainable = False
 
-# 平坦化層
-model.add(tf.keras.layers.Flatten())
+model = models.Sequential([
+    base_model,
+    layers.GlobalAveragePooling2D(),
+    layers.Dense(500, activation='relu'),
+    layers.BatchNormalization(),
+    layers.Dense(category, activation='softmax')
+])
 
-# 全連接層 
-model.add(tf.keras.layers.Dense(1000, activation='relu'))
-model.add(tf.keras.layers.BatchNormalization())
-model.add(tf.keras.layers.Dense(1000, activation='relu'))
-model.add(tf.keras.layers.BatchNormalization())
-model.add(tf.keras.layers.Dense(500, activation='relu'))
-model.add(tf.keras.layers.BatchNormalization())
-model.add(tf.keras.layers.Dense(250, activation='relu'))
-model.add(tf.keras.layers.Dense(10, activation='relu'))  
-model.add(tf.keras.layers.Dense(units=category,
-    activation=tf.nn.softmax ))
-
-
-# 輸出層
-model.add(tf.keras.layers.Dense(units=category, activation='softmax'))
-
-# 編譯模型 - 使用更好的優化器設定
 model.compile(
-    optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),  # 較小的學習率
+    optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
     loss='categorical_crossentropy',
     metrics=['accuracy']
 )
+
+# # 建立模型
+# model = tf.keras.models.Sequential()
+
+# # 卷積層 - 加入 2D 的 Convolution Layer，接著一層 ReLU 的 Activation 函數
+# model.add(tf.keras.layers.Conv2D(
+#     filters=32, 
+#     kernel_size=(3, 3),
+#     padding="same",
+#     activation='relu',
+#     input_shape=(w, h, c)
+# ))
+
+# # 添加池化層減少特徵圖大小
+# model.add(tf.keras.layers.MaxPooling2D(pool_size=(4, 4)))  # 128x128 -> 32x32
+
+# # 平坦化層
+# model.add(tf.keras.layers.Flatten())
+
+# # 全連接層 
+# model.add(tf.keras.layers.Dense(1000, activation='relu'))
+# model.add(tf.keras.layers.BatchNormalization())
+# model.add(tf.keras.layers.Dense(1000, activation='relu'))
+# model.add(tf.keras.layers.BatchNormalization())
+# model.add(tf.keras.layers.Dense(500, activation='relu'))
+# model.add(tf.keras.layers.BatchNormalization())
+# model.add(tf.keras.layers.Dense(250, activation='relu'))
+# model.add(tf.keras.layers.Dense(10, activation='relu'))  
+# model.add(tf.keras.layers.Dense(units=category,
+#     activation=tf.nn.softmax ))
+
+# # 輸出層
+# model.add(tf.keras.layers.Dense(units=category, activation='softmax'))
+
+# # 編譯模型 - 使用更好的優化器設定
+# model.compile(
+#     optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),  # 較小的學習率
+#     loss='categorical_crossentropy',
+#     metrics=['accuracy']
+# )
 
 # 顯示模型架構
 model.summary()
