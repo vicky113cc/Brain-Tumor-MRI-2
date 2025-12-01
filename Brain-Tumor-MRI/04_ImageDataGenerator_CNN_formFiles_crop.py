@@ -116,6 +116,9 @@ model = models.Sequential([
     layers.GlobalAveragePooling2D(),
     layers.Dense(500, activation='relu'),
     layers.BatchNormalization(),
+    layers.Dense(100, activation='relu'),
+    layers.BatchNormalization(),
+    layers.Dense(10, activation='relu'),
     layers.Dense(category, activation='softmax')
 ])
 
@@ -167,7 +170,7 @@ model.compile(
 
 # 顯示模型架構
 model.summary()
-learning_rate = 0.1   # 學習率
+learning_rate = 0.01   # 學習率
 opt1 = tf.keras.optimizers.Adam(learning_rate=learning_rate)  # 優化器
 model.compile(
     optimizer=opt1,
