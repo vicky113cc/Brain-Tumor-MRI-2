@@ -114,16 +114,16 @@ base_model.trainable = False
 model = models.Sequential([
     base_model,
     layers.GlobalAveragePooling2D(),
-    layers.Dense(500, activation='relu'),
+    layers.Dense(1000, activation='relu'),
     layers.BatchNormalization(),
-    layers.Dense(100, activation='relu'),
-    layers.BatchNormalization(),
-    layers.Dense(10, activation='relu'),
+    # layers.Dense(100, activation='relu'),
+    # layers.BatchNormalization(),
+    # layers.Dense(10, activation='relu'),
     layers.Dense(category, activation='softmax')
 ])
 
 model.compile(
-    optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
+    optimizer=tf.keras.optimizers.Adam(learning_rate=0.1),
     loss='categorical_crossentropy',
     metrics=['accuracy']
 )
@@ -170,14 +170,13 @@ model.compile(
 
 # 顯示模型架構
 model.summary()
-learning_rate = 0.01   # 學習率
-opt1 = tf.keras.optimizers.Adam(learning_rate=learning_rate)  # 優化器
-model.compile(
-    optimizer=opt1,
-    loss=tf.keras.losses.categorical_crossentropy,
-    metrics=['accuracy'])
+# learning_rate = 0.1   # 學習率
+# opt1 = tf.keras.optimizers.Adam(learning_rate=learning_rate)  # 優化器
+# model.compile(
+#     optimizer=opt1,
+#     loss=tf.keras.losses.categorical_crossentropy,
+#     metrics=['accuracy'])
 
-model.summary()        # 顯示模型摘要
 
 # 在 model.compile() 之後，model.summary() 之前加入：
 checkpoint = tf.keras.callbacks.ModelCheckpoint(
