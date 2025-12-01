@@ -123,13 +123,14 @@ model.add(tf.keras.layers.Dense(250, activation='relu'))
 model.add(tf.keras.layers.BatchNormalization())  # 標準化
 model.add(tf.keras.layers.Dense(500, activation='relu'))
 model.add(tf.keras.layers.BatchNormalization())  # 標準化
-model.add(tf.keras.layers.Dense(250, activation='relu'))
+model.add(tf.keras.layers.Dense(25, activation='relu'))
 model.add(tf.keras.layers.BatchNormalization())  # 標準化
-model.add(tf.keras.layers.Dense(100, activation='relu'))
+model.add(tf.keras.layers.Dense(10, activation='relu'))
 model.add(tf.keras.layers.BatchNormalization())  # 標準化
 model.add(tf.keras.layers.Dense(500, activation='relu'))
 model.add(tf.keras.layers.BatchNormalization())  # 標準化
-
+model.add(tf.keras.layers.Dense(100, activation='relu'))
+model.add(tf.keras.layers.BatchNormalization())  # 標準化
 
 # 輸出層
 model.add(tf.keras.layers.Dense(units=category, activation='softmax'))
