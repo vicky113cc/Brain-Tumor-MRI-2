@@ -19,8 +19,8 @@ dirs = os.listdir(IMAGEPATH)         #  找所有的檔案
 X=[]
 Y=[]
 print(dirs)
-w=128  #128 # 224                     # 太大張記憶體會爆掉，要訓練時的圖片大小
-h=128  #128 # 224
+w=32  #128 # 224                     # 太大張記憶體會爆掉，要訓練時的圖片大小
+h=32  #128 # 224
 c=3                                   # 顏色數 RGB 3  灰階 1
 i=0                                   # 類別編號
 for name in dirs:                     # 再往下讀取每個資料夾
@@ -100,24 +100,42 @@ datagen = tf.keras.preprocessing.image.ImageDataGenerator(
 
 # 建立模型
 model = tf.keras.models.Sequential()
-# 卷積層   加入 2D 的 Convolution Layer，接著一層 ReLU 的 Activation 函數
-model.add(tf.keras.layers.Conv2D(filters=32, kernel_size=(3, 3),
-                 padding="same",
-                 activation='relu',
-                 input_shape=(w,h,c)))
+
+# 卷積層 - 加入 2D 的 Convolution Layer，接著一層 ReLU 的 Activation 函數
+model.add(tf.keras.layers.Conv2D(
+    filters=32, 
+    kernel_size=(3, 3),
+    padding="same",
+    activation='relu',
+    input_shape=(w, h, c)
+))
 
 # 添加池化層減少特徵圖大小
 model.add(tf.keras.layers.MaxPooling2D(pool_size=(4, 4)))  # 128x128 -> 32x32
 
+# 平坦化層
 model.add(tf.keras.layers.Flatten())
+
+# 全連接層 
 model.add(tf.keras.layers.Dense(500, activation='relu'))
-model.add(tf.keras.layers.Dense(500, activation='relu'))
-model.add(tf.keras.layers.Dense(25, activation='relu'))
+model.add(tf.keras.layers.Dense(250, activation='relu'))
+model.add(tf.keras.layers.Dense(50, activation='relu'))
 model.add(tf.keras.layers.Dense(250, activation='relu'))
 model.add(tf.keras.layers.Dense(100, activation='relu'))
-model.add(tf.keras.layers.Dense(units=category,
-    activation=tf.nn.softmax ))
+model.add(tf.keras.layers.Dense(10, activation='relu'))
 
+# 輸出層
+model.add(tf.keras.layers.Dense(units=category, activation='softmax'))
+
+# 編譯模型 - 使用更好的優化器設定
+model.compile(
+    optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),  # 較小的學習率
+    loss='categorical_crossentropy',
+    metrics=['accuracy']
+)
+
+# 顯示模型架構
+model.summary()
 learning_rate = 0.001   # 學習率
 opt1 = tf.keras.optimizers.Adam(learning_rate=learning_rate)  # 優化器
 model.compile(
@@ -141,7 +159,7 @@ checkpoint = tf.keras.callbacks.ModelCheckpoint(
 trainData=datagen.flow(x_train,y_train2,batch_size=64)  # 批次大小 64 原本的一張圖片變成64張
 
 history = model.fit(trainData,
-                    epochs=100,
+                    epochs=30,
                     callbacks=[checkpoint],
                     validation_data=(x_test, y_test2), 
                     )
