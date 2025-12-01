@@ -116,9 +116,10 @@ model = models.Sequential([
     layers.GlobalAveragePooling2D(),
     layers.Dense(1000, activation='relu'),
     layers.BatchNormalization(),
-    # layers.Dense(100, activation='relu'),
-    # layers.BatchNormalization(),
-    # layers.Dense(10, activation='relu'),
+    layers.Dense(1000, activation='relu'),
+    layers.BatchNormalization(),
+    layers.Dense(10, activation='relu'),
+    layers.BatchNormalization(),
     layers.Dense(category, activation='softmax')
 ])
 
