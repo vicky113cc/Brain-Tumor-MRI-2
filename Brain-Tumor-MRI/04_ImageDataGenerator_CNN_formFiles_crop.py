@@ -120,7 +120,6 @@ model.add(tf.keras.layers.Flatten())
 model.add(tf.keras.layers.Dense(500, activation='relu'))
 model.add(tf.keras.layers.Dense(250, activation='relu'))
 model.add(tf.keras.layers.Dense(10, activation='relu'))  
-model.add(tf.keras.layers.Dense(250, activation='relu'))
 model.add(tf.keras.layers.Dense(units=category,
     activation=tf.nn.softmax ))
 
@@ -137,7 +136,7 @@ model.compile(
 
 # 顯示模型架構
 model.summary()
-learning_rate = 0.001   # 學習率
+learning_rate = 0.01   # 學習率
 opt1 = tf.keras.optimizers.Adam(learning_rate=learning_rate)  # 優化器
 model.compile(
     optimizer=opt1,
