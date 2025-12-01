@@ -100,36 +100,36 @@ datagen = tf.keras.preprocessing.image.ImageDataGenerator(
                             zoom_range=0.3 ,               # 隨機縮放範圍
 							data_format='channels_last')   # 圖片格式為 (張,高,寬,顏色數)
 
+# ======================================
+# # 使用遷移學習
+# base_model = EfficientNetB0(
+#     include_top=False,
+#     weights='imagenet',
+#     input_shape=(w, h, c)
+# )
 
-# 使用遷移學習
-base_model = EfficientNetB0(
-    include_top=False,
-    weights='imagenet',
-    input_shape=(w, h, c)
-)
+# # 凍結預訓練層
+# base_model.trainable = False
 
-# 凍結預訓練層
-base_model.trainable = False
+# model = models.Sequential([
+#     base_model,
+#     layers.GlobalAveragePooling2D(),
+#     layers.Dense(1000, activation='relu'),
+#     layers.BatchNormalization(),
+#     layers.Dense(1000, activation='relu'),
+#     layers.BatchNormalization(),
+#     layers.Dense(10, activation='relu'),
+#     layers.BatchNormalization(),
+#     layers.Dense(category, activation='softmax')
+# ])
 
-model = models.Sequential([
-    base_model,
-    layers.GlobalAveragePooling2D(),
-    layers.Dense(1000, activation='relu'),
-    layers.BatchNormalization(),
-    layers.Dense(1000, activation='relu'),
-    layers.BatchNormalization(),
-    layers.Dense(10, activation='relu'),
-    layers.BatchNormalization(),
-    layers.Dense(category, activation='softmax')
-])
-
-model.compile(
-    optimizer=tf.keras.optimizers.Adam(learning_rate=0.1),
-    loss='categorical_crossentropy',
-    metrics=['accuracy']
-)
-
-# # 建立模型
+# model.compile(
+#     optimizer=tf.keras.optimizers.Adam(learning_rate=0.1),
+#     loss='categorical_crossentropy',
+#     metrics=['accuracy']
+# )
+# ========================================
+# 建立模型
 # model = tf.keras.models.Sequential()
 
 # # 卷積層 - 加入 2D 的 Convolution Layer，接著一層 ReLU 的 Activation 函數
@@ -161,13 +161,45 @@ model.compile(
 
 # # 輸出層
 # model.add(tf.keras.layers.Dense(units=category, activation='softmax'))
+# =====================================
+# 建立模型
+model = models.Sequential()
 
-# # 編譯模型 - 使用更好的優化器設定
-# model.compile(
-#     optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),  # 較小的學習率
-#     loss='categorical_crossentropy',
-#     metrics=['accuracy']
-# )
+# Block 1
+model.add(layers.Conv2D(700, (3,3), padding='same', activation='relu',
+                        input_shape=(w, h, c)))
+model.add(layers.MaxPooling2D((2,2)))
+
+# Block 2
+model.add(layers.Conv2D(250, (3,3), padding='same', activation='relu'))
+model.add(layers.MaxPooling2D((2,2)))
+
+# Block 3
+model.add(layers.Conv2D(500, (3,3), padding='same', activation='relu'))
+model.add(layers.MaxPooling2D((2,2)))
+
+# Block 4
+model.add(layers.Conv2D(250, (3,3), padding='same', activation='relu'))
+model.add(layers.MaxPooling2D((2,2)))
+
+# Block 5
+model.add(layers.Conv2D(100, (3,3), padding='same', activation='relu'))
+model.add(layers.MaxPooling2D((2,2)))
+
+# Flatten + Dense
+model.add(layers.Flatten())
+model.add(layers.Dense(500, activation='relu'))
+
+# Output
+model.add(layers.Dense(category, activation='softmax'))
+
+
+# 編譯模型 - 使用更好的優化器設定
+model.compile(
+    optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),  # 較小的學習率
+    loss='categorical_crossentropy',
+    metrics=['accuracy']
+)
 
 # 顯示模型架構
 model.summary()
