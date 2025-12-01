@@ -146,12 +146,12 @@ model.add(tf.keras.layers.BatchNormalization())  # 加速訓練
 model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))  # 128x128 -> 32x32  # 添加池化層減少特徵圖大小
 
 # 第二組卷積 - 提取更複雜特徵
-model.add(tf.keras.layers.Conv2D(128, (3, 3), padding="same", activation='relu'))
+model.add(tf.keras.layers.Conv2D(100, (3, 3), padding="same", activation='relu'))
 model.add(tf.keras.layers.BatchNormalization())
 model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))  # 64→32
 
 # 第三組卷積 - 深層特徵
-model.add(tf.keras.layers.Conv2D(256, (3, 3), padding="same", activation='relu'))
+model.add(tf.keras.layers.Conv2D(250, (3, 3), padding="same", activation='relu'))
 model.add(tf.keras.layers.BatchNormalization())
 model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))  # 32→16
 
@@ -161,7 +161,9 @@ model.add(tf.keras.layers.Flatten())
 # 全連接層 
 model.add(tf.keras.layers.Dense(500, activation='relu'))
 model.add(tf.keras.layers.BatchNormalization())  # 加速訓練
-model.add(tf.keras.layers.Dense(250, activation='relu'))
+model.add(tf.keras.layers.Dense(300, activation='relu'))
+model.add(tf.keras.layers.BatchNormalization())  # 加速訓練
+model.add(tf.keras.layers.Dense(100, activation='relu'))
 model.add(tf.keras.layers.BatchNormalization())  # 加速訓練
 model.add(tf.keras.layers.Dense(units=category,
     activation=tf.nn.softmax ))
@@ -211,7 +213,7 @@ model.add(tf.keras.layers.Dense(units=category, activation='softmax'))
 
 # 顯示模型架構
 model.summary()
-learning_rate = 0.1   # 學習率
+learning_rate = 0.01   # 學習率
 opt1 = tf.keras.optimizers.Adam(learning_rate=learning_rate)  # 優化器
 model.compile(
     optimizer=opt1,
