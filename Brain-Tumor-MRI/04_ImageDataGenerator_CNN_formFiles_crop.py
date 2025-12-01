@@ -121,14 +121,13 @@ model.add(tf.keras.layers.Dense(500, activation='relu'))
 model.add(tf.keras.layers.BatchNormalization())  # 標準化
 model.add(tf.keras.layers.Dense(250, activation='relu'))
 model.add(tf.keras.layers.BatchNormalization())  # 標準化
-model.add(tf.keras.layers.Dense(500, activation='relu'))
-model.add(tf.keras.layers.BatchNormalization())  # 標準化
+# model.add(tf.keras.layers.Dense(500, activation='relu'))
+# model.add(tf.keras.layers.BatchNormalization())  # 標準化
 model.add(tf.keras.layers.Dense(25, activation='relu'))
 model.add(tf.keras.layers.BatchNormalization())  # 標準化
 model.add(tf.keras.layers.Dense(10, activation='relu'))
-model.add(tf.keras.layers.BatchNormalization())  # 標準化
-model.add(tf.keras.layers.Dense(500, activation='relu'))
-model.add(tf.keras.layers.BatchNormalization())  # 標準化
+# model.add(tf.keras.layers.BatchNormalization())  # 標準化
+# model.add(tf.keras.layers.Dense(500, activation='relu'))
 model.add(tf.keras.layers.Dense(100, activation='relu'))
 model.add(tf.keras.layers.BatchNormalization())  # 標準化
 
@@ -167,7 +166,7 @@ checkpoint = tf.keras.callbacks.ModelCheckpoint(
 trainData=datagen.flow(x_train,y_train2,batch_size=64)  # 批次大小 64 原本的一張圖片變成64張
 
 history = model.fit(trainData,
-                    epochs=30,
+                    epochs=80,
                     callbacks=[checkpoint],
                     validation_data=(x_test, y_test2), 
                     )
