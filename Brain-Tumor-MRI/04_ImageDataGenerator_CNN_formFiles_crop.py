@@ -298,4 +298,3 @@ print(classification_report(y_true, y_pred, target_names=['PNEUMONIA', 'NORMAL']
 
 print("\n混淆矩陣:")
 print(confusion_matrix(y_true, y_pred))
-
