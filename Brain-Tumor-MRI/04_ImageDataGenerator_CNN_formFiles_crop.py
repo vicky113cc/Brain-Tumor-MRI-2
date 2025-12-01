@@ -130,85 +130,84 @@ datagen = tf.keras.preprocessing.image.ImageDataGenerator(
 # )
 # ========================================
 # 建立模型
-# model = tf.keras.models.Sequential()
+model = tf.keras.models.Sequential()
 
-# # 卷積層 - 加入 2D 的 Convolution Layer，接著一層 ReLU 的 Activation 函數
-# model.add(tf.keras.layers.Conv2D(
-#     filters=32, 
-#     kernel_size=(3, 3),
-#     padding="same",
-#     activation='relu',
-#     input_shape=(w, h, c)
-# ))
+# 卷積層 - 加入 2D 的 Convolution Layer，接著一層 ReLU 的 Activation 函數
+model.add(tf.keras.layers.Conv2D(
+    filters=32, 
+    kernel_size=(3, 3),
+    padding="same",
+    activation='relu',
+    input_shape=(w, h, c)
+))
 
-# # 添加池化層減少特徵圖大小
-# model.add(tf.keras.layers.MaxPooling2D(pool_size=(4, 4)))  # 128x128 -> 32x32
+# 添加池化層減少特徵圖大小
+model.add(tf.keras.layers.MaxPooling2D(pool_size=(4, 4)))  # 128x128 -> 32x32
 
-# # 平坦化層
-# model.add(tf.keras.layers.Flatten())
+# 平坦化層
+model.add(tf.keras.layers.Flatten())
 
-# # 全連接層 
-# model.add(tf.keras.layers.Dense(1000, activation='relu'))
-# model.add(tf.keras.layers.BatchNormalization())
-# model.add(tf.keras.layers.Dense(1000, activation='relu'))
-# model.add(tf.keras.layers.BatchNormalization())
-# model.add(tf.keras.layers.Dense(500, activation='relu'))
-# model.add(tf.keras.layers.BatchNormalization())
-# model.add(tf.keras.layers.Dense(250, activation='relu'))
-# model.add(tf.keras.layers.Dense(10, activation='relu'))  
-# model.add(tf.keras.layers.Dense(units=category,
-#     activation=tf.nn.softmax ))
+# 全連接層 
+model.add(tf.keras.layers.Dense(500, activation='relu'))
+model.add(tf.keras.layers.BatchNormalization())
+model.add(tf.keras.layers.Dense(250, activation='relu'))
+model.add(tf.keras.layers.BatchNormalization())
+model.add(tf.keras.layers.Dense(100, activation='relu'))
+model.add(tf.keras.layers.Dense(10, activation='relu'))  
+model.add(tf.keras.layers.Dense(units=category,
+    activation=tf.nn.softmax ))
 
-# # 輸出層
-# model.add(tf.keras.layers.Dense(units=category, activation='softmax'))
+# 輸出層
+model.add(tf.keras.layers.Dense(units=category, activation='softmax'))
 # =====================================
 # 建立模型
-model = models.Sequential()
+# model = models.Sequential()
 
-# Block 1
-model.add(layers.Conv2D(700, (3,3), padding='same', activation='relu',
-                        input_shape=(w, h, c)))
-model.add(layers.MaxPooling2D((2,2)))
+# # Block 1
+# model.add(layers.Conv2D(700, (3,3), padding='same', activation='relu',
+#                         input_shape=(w, h, c)))
+# model.add(layers.MaxPooling2D((2,2)))
 
-# Block 2
-model.add(layers.Conv2D(250, (3,3), padding='same', activation='relu'))
-model.add(layers.MaxPooling2D((2,2)))
+# # Block 2
+# model.add(layers.Conv2D(250, (3,3), padding='same', activation='relu'))
+# model.add(layers.MaxPooling2D((2,2)))
 
-# Block 3
-model.add(layers.Conv2D(500, (3,3), padding='same', activation='relu'))
-model.add(layers.MaxPooling2D((2,2)))
+# # Block 3
+# model.add(layers.Conv2D(500, (3,3), padding='same', activation='relu'))
+# model.add(layers.MaxPooling2D((2,2)))
 
-# Block 4
-model.add(layers.Conv2D(250, (3,3), padding='same', activation='relu'))
-model.add(layers.MaxPooling2D((2,2)))
+# # Block 4
+# model.add(layers.Conv2D(250, (3,3), padding='same', activation='relu'))
+# model.add(layers.MaxPooling2D((2,2)))
 
-# Block 5
-model.add(layers.Conv2D(100, (3,3), padding='same', activation='relu'))
-model.add(layers.MaxPooling2D((2,2)))
+# # Block 5
+# model.add(layers.Conv2D(100, (3,3), padding='same', activation='relu'))
+# model.add(layers.MaxPooling2D((2,2)))
 
-# Flatten + Dense
-model.add(layers.Flatten())
-model.add(layers.Dense(500, activation='relu'))
+# # Flatten + Dense
+# model.add(layers.Flatten())
+# model.add(layers.Dense(500, activation='relu'))
 
-# Output
-model.add(layers.Dense(category, activation='softmax'))
+# # Output
+# model.add(layers.Dense(category, activation='softmax'))
 
 
-# 編譯模型 - 使用更好的優化器設定
-model.compile(
-    optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),  # 較小的學習率
-    loss='categorical_crossentropy',
-    metrics=['accuracy']
-)
+# # 編譯模型 - 使用更好的優化器設定
+# model.compile(
+#     optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),  # 較小的學習率
+#     loss='categorical_crossentropy',
+#     metrics=['accuracy']
+# )
+# ======================================================
 
 # 顯示模型架構
 model.summary()
-# learning_rate = 0.1   # 學習率
-# opt1 = tf.keras.optimizers.Adam(learning_rate=learning_rate)  # 優化器
-# model.compile(
-#     optimizer=opt1,
-#     loss=tf.keras.losses.categorical_crossentropy,
-#     metrics=['accuracy'])
+learning_rate = 0.1   # 學習率
+opt1 = tf.keras.optimizers.Adam(learning_rate=learning_rate)  # 優化器
+model.compile(
+    optimizer=opt1,
+    loss=tf.keras.losses.categorical_crossentropy,
+    metrics=['accuracy'])
 
 
 # 在 model.compile() 之後，model.summary() 之前加入：
@@ -225,7 +224,7 @@ checkpoint = tf.keras.callbacks.ModelCheckpoint(
 trainData=datagen.flow(x_train,y_train2,batch_size=64)  # 批次大小 64 原本的一張圖片變成64張
 
 history = model.fit(trainData,
-                    epochs=50,
+                    epochs=80,
                     callbacks=[checkpoint],
                     validation_data=(x_test, y_test2), 
                     )
