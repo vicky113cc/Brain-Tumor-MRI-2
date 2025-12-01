@@ -281,3 +281,21 @@ im_bgr = cv2.putText(im_bgr, str1, (10,30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,
 cv2.imshow('image', im_bgr)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+# =====================================
+# Precision, Recall, F1-Score
+from sklearn.metrics import classification_report, confusion_matrix
+import numpy as np
+
+# 預測測試集
+y_prob = model.predict(x_test)          # (N, 2) 機率
+y_pred = np.argmax(y_prob, axis=1)      # (N,) 預測類別 0/1
+
+# y_test 是一維標籤 (N,) → 不要再 argmax
+y_true = y_test
+
+print("\n分類報告:")
+print(classification_report(y_true, y_pred, target_names=['PNEUMONIA', 'NORMAL']))
+
+print("\n混淆矩陣:")
+print(confusion_matrix(y_true, y_pred))
+
