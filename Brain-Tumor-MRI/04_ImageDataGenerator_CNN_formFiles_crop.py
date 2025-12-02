@@ -281,20 +281,30 @@ im_bgr = cv2.putText(im_bgr, str1, (10,30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,
 cv2.imshow('image', im_bgr)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+
+from google.colab.patches import cv2_imshow
+im_bgr = cv2.putText(im_bgr, str1, (10,30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0, 0), 1, cv2.LINE_AA)
+cv2_imshow(im_bgr)
 # =====================================
-# Precision, Recall, F1-Score
+# Precision, Recall, F1-Score (Brain Tumor 4 classes)
 from sklearn.metrics import classification_report, confusion_matrix
 import numpy as np
 
-# 預測測試集
-y_prob = model.predict(x_test)          # (N, 2) 機率
-y_pred = np.argmax(y_prob, axis=1)      # (N,) 預測類別 0/1
+# 你的類別順序（要跟訓練時的一樣）
+class_names = ['glioma', 'meningioma', 'notumor', 'pituitary']
 
-# y_test 是一維標籤 (N,) → 不要再 argmax
+# 預測測試集
+y_prob = model.predict(x_test)          # (N, 4) 機率
+y_pred = np.argmax(y_prob, axis=1)      # (N,) 預測類別 0~3
+
+# 如果 y_test 已經是一維標籤 (N,)：
 y_true = y_test
 
+# 如果 y_test 是 one-hot (N,4)，請改用這行：
+# y_true = np.argmax(y_test, axis=1)
+
 print("\n分類報告:")
-print(classification_report(y_true, y_pred, target_names=['PNEUMONIA', 'NORMAL']))
+print(classification_report(y_true, y_pred, target_names=class_names))
 
 print("\n混淆矩陣:")
 print(confusion_matrix(y_true, y_pred))
